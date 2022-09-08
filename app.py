@@ -43,7 +43,9 @@ def index():
 
 #  Venues
 #  ----------------------------------------------------------------
-
+"""
+Handle GET requests for all available venues.
+"""
 @app.route('/venues')
 def venues():
 
@@ -206,6 +208,9 @@ def delete_venue(venue_id):
 
 #  Artists
 #  ----------------------------------------------------------------
+"""
+Handle GET requests for all available artists.
+"""
 @app.route('/artists')
 def artists():
 
@@ -441,7 +446,9 @@ def create_artist_submission():
 
 #  Shows
 #  ----------------------------------------------------------------
-
+"""
+Handle GET requests for all available shows
+"""
 @app.route('/shows')
 def shows():
   # displays list of shows at /shows
@@ -471,6 +478,9 @@ def create_shows():
   form = ShowForm()
   return render_template('forms/new_show.html', form=form)
 
+"""
+POST a new show. Require the id artist and id venue.
+"""
 @app.route('/shows/create', methods=['POST'])
 def create_show_submission():
   # called to create new shows in the db, upon submitting new show listing form
