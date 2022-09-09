@@ -44,7 +44,7 @@ def index():
 #  Venues
 #  ----------------------------------------------------------------
 """
-Handle GET requests for all available venues.
+Fetch all venues.
 """
 @app.route('/venues')
 def venues():
@@ -66,6 +66,9 @@ def venues():
     })
   return render_template('pages/venues.html', areas=data);
 
+"""
+Search on venues with partial string search.
+"""
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
   
@@ -83,6 +86,10 @@ def search_venues():
   }
   return render_template('pages/search_venues.html', results=response, search_term=search_term )
 
+
+"""
+Fetch a venue.
+"""
 @app.route('/venues/<int:venue_id>')
 def show_venue(venue_id):
 
@@ -112,7 +119,7 @@ def show_venue(venue_id):
   data={
     "id": venue_id,
     "name": venue.name,
-    "genres": [venue.genres],
+    "genres": [venue.genres.replace("{","").replace("}","")],
     "address": venue.address,
     "city": venue.city,
     "state": venue.state,
@@ -173,7 +180,9 @@ def create_venue_submission():
   else:
     return render_template('forms/new_venue.html', form=form)
   
-
+"""
+Delete a venue.
+"""
 @app.route('/venues/<venue_id>', methods=['DELETE'])
 def delete_venue(venue_id):
 
@@ -206,7 +215,7 @@ def delete_venue(venue_id):
 #  Artists
 #  ----------------------------------------------------------------
 """
-Handle GET requests for all available artists.
+Fetch all artists.
 """
 @app.route('/artists')
 def artists():
@@ -231,6 +240,10 @@ def search_artists():
   }
   return render_template('pages/search_artists.html', results=response, search_term=search_term)
 
+
+"""
+Fetch an artist.
+"""
 @app.route('/artists/<int:artist_id>')
 def show_artist(artist_id):
   # shows the artist page with the given artist_id
@@ -434,11 +447,11 @@ def create_artist_submission():
 #  Shows
 #  ----------------------------------------------------------------
 """
-Handle GET requests for all available shows
+GET a list of shows.
 """
 @app.route('/shows')
 def shows():
-  # displays list of shows at /shows
+  
 
   data = []
   for s in Show.query.all():
@@ -459,15 +472,16 @@ def shows():
     })
   return render_template('pages/shows.html', shows=data)
 
+"""
+Create a new show. Require the id artist and id venue.
+"""
 @app.route('/shows/create')
 def create_shows():
   # renders form. do not touch.
   form = ShowForm()
   return render_template('forms/new_show.html', form=form)
 
-"""
-POST a new show. Require the id artist and id venue.
-"""
+
 @app.route('/shows/create', methods=['POST'])
 def create_show_submission():
   # called to create new shows in the db, upon submitting new show listing form
@@ -508,6 +522,9 @@ def create_show_submission():
       return render_template('pages/home.html')
     # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
 
+"""
+Error handling definition.
+"""
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('errors/404.html'), 404
