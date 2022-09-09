@@ -2,7 +2,7 @@ from datetime import datetime
 from wsgiref.validate import validator
 from flask_wtf import FlaskForm as Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
-from wtforms.validators import DataRequired, AnyOf, URL, Regexp
+from wtforms.validators import Optional, DataRequired, AnyOf, URL, Regexp
 
 class ShowForm(Form):
     artist_id = StringField(
@@ -84,11 +84,11 @@ class VenueForm(Form):
         'address', validators=[DataRequired()]
     )
     phone = StringField(
-        'phone', validators=[DataRequired(),
-                             Regexp("\b[\d]{3}-[\d]{3}-[\d]{4}\b",
-                             message="Format mandatory : xxx-xxx-xxxx"
-                                   )
-                            ]
+        'phone', 
+        validators=[
+            DataRequired(),
+            Regexp('^\d{3}-\d{3}-\d{4}$',flags=0,message="Pattern expected : xxx-xxx-xxxx")
+        ]
     )
     image_link = StringField(
         'image_link'
@@ -119,13 +119,13 @@ class VenueForm(Form):
         ]
     )
     facebook_link = StringField(
-        'facebook_link', validators=[URL()]
+        'facebook_link', [Optional(), URL(require_tld=True, message=None)]
     )
     website_link = StringField(
-        'website_link', validators=[URL()]
+        'website_link', [Optional(), URL(require_tld=True, message=None)]
     )
 
-    seeking_talent = BooleanField( 'seeking_talent' )
+    seeking_talent = BooleanField('seeking_talent')
 
     seeking_description = StringField(
         'seeking_description'
@@ -197,11 +197,11 @@ class ArtistForm(Form):
         ]
     )
     phone = StringField(
-        'phone', validators=[DataRequired(),
-                             Regexp("\b[\d]{3}-[\d]{3}-[\d]{4}\b",
-                             message="Format mandatory : xxx-xxx-xxxx"
-                                   )
-                            ]
+        'phone', 
+        validators=[
+            DataRequired(),
+            Regexp('^\d{3}-\d{3}-\d{4}$',flags=0,message="Pattern expected : xxx-xxx-xxxx")
+        ]
     )
     image_link = StringField(
         'image_link'
@@ -231,13 +231,11 @@ class ArtistForm(Form):
         ]
      )
     facebook_link = StringField(
-        # TODO implement enum restriction
-        'facebook_link', validators=[URL()]
-     )
-
+        'facebook_link', [Optional(), URL(require_tld=True, message=None)]
+    )
     website_link = StringField(
-        'website_link', validators=[URL()]
-     )
+        'website_link', [Optional(), URL(require_tld=True, message=None)]
+    )
 
     seeking_venue = BooleanField( 'seeking_venue' )
 
